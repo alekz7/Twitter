@@ -3,6 +3,10 @@ import sys
 import argparse
 import tweepy
 from textblob import TextBlob as tb
+from dotenv import load_dotenv
+
+# Load environment variables from .env file if it exists
+load_dotenv()
 
 def get_sentiment_label(polarity):
     if polarity > 0:
@@ -20,8 +24,8 @@ def main():
 
     # Load environment variables
     try:
-        consumer_token      = os.environ['CONSUMER_TOKEN']
-        consumer_secret     = os.environ['CONSUMER_SECRET']
+        consumer_key      = os.environ['CONSUMER_KEY']
+        consumer_key_secret     = os.environ['CONSUMER_KEY_SECRET']
         access_token        = os.environ['ACCESS_TOKEN']
         access_token_secret = os.environ['ACCESS_TOKEN_SECRET']
     except KeyError as e:
@@ -30,7 +34,7 @@ def main():
 
     # Authentication
     try:
-        auth = tweepy.OAuthHandler(consumer_token, consumer_secret)
+        auth = tweepy.OAuthHandler(consumer_key, consumer_key_secret)
         auth.set_access_token(access_token, access_token_secret)
         api = tweepy.API(auth)
         # Verify credentials

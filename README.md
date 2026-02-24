@@ -5,6 +5,7 @@ A simple Python script to perform sentiment analysis on tweets using the Twitter
 ## Prerequisites
 
 Before running the script, you need to:
+
 1. Create a Twitter Developer account at [developer.twitter.com](https://developer.twitter.com/).
 2. Create an application to obtain your API credentials.
 3. (Optional but recommended) Create and activate a virtual environment:
@@ -28,12 +29,28 @@ python -m textblob.download_corpora
 
 ## Setup
 
-Set the following environment variables with your Twitter API credentials:
+The script expects your Twitter API credentials to be set as environment variables. You can provide these by creating a `.env` file in the project root:
 
-* `CONSUMER_TOKEN`: Your Twitter API Key
-* `CONSUMER_SECRET`: Your Twitter API Secret Key
-* `ACCESS_TOKEN`: Your Access Token
-* `ACCESS_TOKEN_SECRET`: Your Access Token Secret
+1. Copy the example file:
+
+```bash
+cp .env.example .env
+```
+
+2. Edit the `.env` file and fill in your credentials:
+   - `CONSUMER_KEY`: Your Twitter API Key
+   - `CONSUMER_KEY_SECRET`: Your Twitter API Secret Key
+   - `ACCESS_TOKEN`: Your Access Token
+   - `ACCESS_TOKEN_SECRET`: Your Access Token Secret
+
+Alternatively, you can export them directly in your shell:
+
+```bash
+# Windows (PowerShell)
+$env:CONSUMER_TOKEN="your_key"
+# macOS/Linux
+export CONSUMER_TOKEN="your_key"
+```
 
 ## Usage
 
