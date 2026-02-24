@@ -7,7 +7,19 @@ A simple Python script to perform sentiment analysis on tweets using the Twitter
 Before running the script, you need to:
 1. Create a Twitter Developer account at [developer.twitter.com](https://developer.twitter.com/).
 2. Create an application to obtain your API credentials.
-3. Install the required dependencies:
+3. (Optional but recommended) Create and activate a virtual environment:
+
+```bash
+# Windows
+python -m venv venv
+.\venv\Scripts\activate
+
+# macOS/Linux
+python3 -m venv venv
+source venv/bin/activate
+```
+
+4. Install the required dependencies:
 
 ```bash
 pip install -r requirements.txt
