@@ -24,39 +24,47 @@ def main():
 
     # Load environment variables
     try:
-        consumer_key      = os.environ['CONSUMER_KEY']
-        consumer_key_secret     = os.environ['CONSUMER_KEY_SECRET']
+        # API v2 usually requires Bearer Token for searches
+        bearer_token        = os.environ.get('BEARER_TOKEN')
+        consumer_key        = os.environ['CONSUMER_KEY']
+        consumer_secret     = os.environ['CONSUMER_KEY_SECRET']
         access_token        = os.environ['ACCESS_TOKEN']
         access_token_secret = os.environ['ACCESS_TOKEN_SECRET']
     except KeyError as e:
         print(f"Error: Environment variable {e} not set.")
         sys.exit(1)
 
-    # Authentication
+    # Authentication (API v2 uses tweepy.Client)
     try:
-        auth = tweepy.OAuthHandler(consumer_key, consumer_key_secret)
-        auth.set_access_token(access_token, access_token_secret)
-        api = tweepy.API(auth)
-        # Verify credentials
-        api.verify_credentials()
+        client = tweepy.Client(
+            bearer_token=bearer_token,
+            consumer_key=consumer_key,
+            consumer_secret=consumer_secret,
+            access_token=access_token,
+            access_token_secret=access_token_secret
+        )
     except Exception as e:
-        print(f"Error: Authentication failed. {e}")
+        print(f"Error: Client initialization failed. {e}")
         sys.exit(1)
 
     print(f"Searching for: {args.query}...\n")
 
     try:
-        # Fetch tweets
-        public_tweets = api.search(q=args.query, count=args.count)
-
-        for tweet in public_tweets:
-            print(f"Tweet: {tweet.text}")
-            analysis = tb(tweet.text)
-            sentiment = analysis.sentiment
-            label = get_sentiment_label(sentiment.polarity)
-            
-            print(f"Sentiment: {label} (Polarity: {sentiment.polarity:.2f}, Subjectivity: {sentiment.subjectivity:.2f})")
-            print("-" * 30)
+        # Fetch tweets using API v2 (search_recent_tweets)
+        # Note: Free tier has strict limits on query complexity
+        response = client.search_recent_tweets(query=args.query, max_results=args.count)
+        
+        if response.data:
+            for tweet in response.data:
+                print(f"Tweet: {tweet.text}")
+                analysis = tb(tweet.text)
+                sentiment = analysis.sentiment
+                label = get_sentiment_label(sentiment.polarity)
+                
+                print(f"Sentiment: {label} (Polarity: {sentiment.polarity:.2f}, Subjectivity: {sentiment.subjectivity:.2f})")
+                print("-" * 30)
+        else:
+            print("No tweets found or access limited.")
             
     except Exception as e:
         print(f"Error fetching tweets: {e}")
